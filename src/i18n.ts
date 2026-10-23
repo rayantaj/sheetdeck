@@ -1,0 +1,59 @@
+export type Lang = 'en' | 'ar'
+
+export const strings = {
+  en: {
+    toggle: 'العربية',
+    headline: 'Your spreadsheet, as a deck.',
+    lead: 'Drop an Excel or CSV file and get a presentation: one chart per finding.',
+    drop: 'Drop a spreadsheet here',
+    browse: 'or choose a file (.xlsx, .xls, .csv)',
+    sample: 'Try a sample',
+    privacy: 'Nothing leaves this device',
+    parsing: 'Reading your file…',
+    error: 'That file could not be read.',
+    pickTitle: 'Pick the sheet',
+    pickHint: 'The highlighted row is the header. Click another row to change it.',
+    sheets: 'Sheets',
+    cont: 'Continue',
+    back: 'Choose another file',
+    summary: 'Summary',
+    rows: 'rows',
+    columns: 'columns',
+    number: 'number',
+    date: 'date',
+    category: 'category',
+    text: 'text',
+    id: 'id',
+    boolean: 'yes/no',
+  },
+  ar: {
+    toggle: 'English',
+    headline: 'جدولك، كعرض تقديمي.',
+    lead: 'أسقط ملف إكسل أو CSV واحصل على عرض تقديمي: رسم واحد لكل نتيجة.',
+    drop: 'أسقط جدولك هنا',
+    browse: 'أو اختر ملفاً (.xlsx, .xls, .csv)',
+    sample: 'جرّب نموذجاً',
+    privacy: 'لا شيء يغادر هذا الجهاز',
+    parsing: 'جارٍ قراءة ملفك…',
+    error: 'تعذّرت قراءة هذا الملف.',
+    pickTitle: 'اختر الورقة',
+    pickHint: 'الصف المظلل هو صف العناوين. اضغط صفاً آخر لتغييره.',
+    sheets: 'الأوراق',
+    cont: 'متابعة',
+    back: 'اختر ملفاً آخر',
+    summary: 'الملخص',
+    rows: 'صف',
+    columns: 'عمود',
+    number: 'رقم',
+    date: 'تاريخ',
+    category: 'فئة',
+    text: 'نص',
+    id: 'معرّف',
+    boolean: 'نعم/لا',
+  },
+} as const
+
+export type Strings = (typeof strings)[Lang]
+
+export const loadLang = (): Lang => (localStorage.getItem('sheetdeck.lang') === 'ar' ? 'ar' : 'en')
+export const saveLang = (l: Lang) => localStorage.setItem('sheetdeck.lang', l)

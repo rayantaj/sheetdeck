@@ -27,6 +27,12 @@ Terrazzo (docs/ui.md): paper background, cards as plate inside a 2px ink border 
 
 The CSP meta in `index.html`; the e2e test lists `page.on('request')` URLs and asserts each starts with the preview origin plus `/sheetdeck/`.
 
+## Build notes (where the build differs)
+
+- "Try a sample" imports `public/sample-sales.csv` with `?raw` (bundled into the JS), not `fetch`: the CSP's `connect-src 'none'` would block a fetch.
+- The e2e test sets the file on the page's file input (the drop zone's own input) rather than a synthetic drag event, and also asserts a `fetch` to another host is refused. Vitest runs only `src/**/*.test.ts`.
+- `applyHeader` returns `rows: Cell[][]` as in Types above. `detect.test.ts` reads the three fixtures (`sales.csv`, `titled.xlsx`, `arabic.csv`).
+
 ## Not in the code yet
 Named above but not there when the plan was approved: new files, or check them.
 - `package.json`
