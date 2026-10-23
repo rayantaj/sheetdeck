@@ -16,7 +16,7 @@ function toDate(c: Cell): Date | null {
   let m = /^(\d{4})-(\d{2})-(\d{2})(?:[T ].*)?$/.exec(s)
   if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]))
   m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s)
-  return m ? new Date(Date.UTC(+m[3], +m[2] - 1, +m[1])) : null
+  return m && +m[2] <= 12 && +m[1] <= 31 ? new Date(Date.UTC(+m[3], +m[2] - 1, +m[1])) : null
 }
 
 const BOOLS = [['yes', 'no'], ['true', 'false'], ['0', '1']]
@@ -35,7 +35,7 @@ export function detectHeaderRow(rows: Cell[][]): number {
 export function applyHeader(sheet: Sheet, headerRow: number): Table {
   const head = sheet.rows[headerRow] ?? []
   const body = sheet.rows.slice(headerRow + 1)
-  const width = Math.max(head.length, ...body.map((r) => r.length))
+  const width = body.reduce((w, r) => Math.max(w, r.length), head.length)
   const pad = (r: Cell[]) => Array.from({ length: width }, (_, i) => r[i] ?? null)
   return {
     columns: pad(head).map((h, i) => ({ name: isEmpty(h) ? `Column ${i + 1}` : String(h).trim() })),
@@ -63,14 +63,14 @@ export function detectTypes(table: Table): Column[] {
     const stats: Column['stats'] = { count: values.length, empty: table.rows.length - values.length, distinct }
     if (type === 'number') {
       const nums = values.map(toNumber).filter((v): v is number => v !== null)
-      stats.min = Math.min(...nums)
-      stats.max = Math.max(...nums)
+      stats.min = nums.reduce((a, b) => Math.min(a, b), Infinity)
+      stats.max = nums.reduce((a, b) => Math.max(a, b), -Infinity)
       stats.sum = nums.reduce((a, b) => a + b, 0)
       stats.mean = stats.sum / nums.length
     } else if (type === 'date') {
       const times = values.map((c) => toDate(c)?.getTime()).filter((v): v is number => v !== undefined)
-      stats.min = new Date(Math.min(...times))
-      stats.max = new Date(Math.max(...times))
+      stats.min = new Date(times.reduce((a, b) => Math.min(a, b), Infinity))
+      stats.max = new Date(times.reduce((a, b) => Math.max(a, b), -Infinity))
     }
     return { name: col.name, type, stats }
   })

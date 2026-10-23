@@ -8,6 +8,7 @@ main { display: grid; gap: var(--space-lg); max-width: 900px; }
 .dropzone { padding: 0; cursor: pointer; }
 .dropzone.over { box-shadow: var(--shadow-card-hover); }
 .dropzone-btn { all: unset; box-sizing: border-box; display: grid; gap: var(--space-xs); width: 100%; padding: var(--space-2xl) var(--space-lg); text-align: center; cursor: pointer; }
+.drop-title { font-family: var(--font-display); font-weight: var(--display-weight, 700); font-synthesis: none; letter-spacing: var(--tracking-display); font-size: var(--text-title); line-height: 1.2; text-wrap: balance; }
 .dropzone-btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -6px; }
 .under { margin-top: var(--space-xl); display: flex; gap: var(--space-lg); align-items: baseline; flex-wrap: wrap; }
 .privacy { font-family: var(--font-outlier); font-size: var(--text-sm); }

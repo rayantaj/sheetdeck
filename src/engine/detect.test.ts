@@ -12,6 +12,18 @@ const csv = (name: string): Sheet => ({
 
 const types = (s: Sheet) => detectTypes(applyHeader(s, detectHeaderRow(s.rows))).map((c) => c.type)
 
+describe('detect large and odd input', () => {
+  it('handles 300k rows without overflowing the stack', () => {
+    const rows: Cell[][] = [['n'], ...Array.from({ length: 300000 }, (_, i) => [i])]
+    const [col] = detectTypes(applyHeader({ name: 's', rows }, 0))
+    expect(col.stats.max).toBe(299999)
+  })
+  it('does not read a US date as dd/mm', () => {
+    const rows: Cell[][] = [['d'], ['12/25/2024'], ['12/26/2024']]
+    expect(detectTypes(applyHeader({ name: 's', rows }, 0))[0].type).not.toBe('date')
+  })
+})
+
 describe('detect', () => {
   it('sales csv: header row 0, date/category/number/number', () => {
     const s = csv('sales')

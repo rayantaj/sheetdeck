@@ -30,7 +30,7 @@ export default function SheetPicker({ t, sheets, onContinue }: { t: Strings; she
         <table className="preview">
           <tbody>
             {preview.map((r, i) => (
-              <tr key={start + i} data-header={start + i === header} className={start + i === header ? 'is-header' : ''} onClick={() => setPicked({ ...picked, [active]: start + i })}>
+              <tr key={start + i} data-header={start + i === header} className={start + i === header ? 'is-header' : ''} tabIndex={0} aria-selected={start + i === header} onClick={() => setPicked({ ...picked, [active]: start + i })} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPicked({ ...picked, [active]: start + i }) } }}>
                 {Array.from({ length: width }, (_, j) => <td key={j}>{cell(r[j])}</td>)}
               </tr>
             ))}

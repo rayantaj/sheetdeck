@@ -1,6 +1,6 @@
 # Set up the app: parsing in a worker, header and type detection, the landing and sheet picker, the privacy policy, Pages: tasks
 
-Built as T-41.
+Built as T-41: https://github.com/rayantaj/sheetdeck/pull/1.
 
 - [x] Scaffold: Vite + React 18 + TypeScript, ESLint (Vite's flat config), Vitest, Playwright (@playwright/test, chromium only). package.json scripts: dev, build (tsc -b && vite build), lint, test (vitest run), test:e2e (playwright test, against `vite preview` of dist/ on port 4173), preview. vite.config.ts with base '/sheetdeck/'. Keep src/styles/tokens.css and base.css as they are and import them first in src/main.tsx.
 - [x] index.html: lang='en', <title>sheetdeck</title>, a meta description, the viewport, and the Content Security Policy meta exactly as docs/tech.md states (default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; form-action 'none'; base-uri 'none'). Fonts through @fontsource/syne (700), @fontsource/onest (400, 500), @fontsource/jetbrains-mono (500), @fontsource/ibm-plex-sans-arabic (400, 500), imported in main.tsx so Vite bundles them.

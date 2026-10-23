@@ -20,7 +20,7 @@ export default function DropZone({ t, onFile, onSample }: { t: Strings; onFile: 
         }}
       >
         <button type="button" className="dropzone-btn" onClick={(e) => { e.stopPropagation(); input.current?.click() }}>
-          <h3>{t.drop}</h3>
+          <span className="drop-title">{t.drop}</span>
           <span>{t.browse}</span>
         </button>
         <input
