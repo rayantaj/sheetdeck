@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { parseFile } from './engine/parse'
 import { applyHeader } from './engine/detect'
-import { buildDeck } from './engine/deck'
+import { buildDeck, fromFile } from './engine/deck'
 import type { Deck as DeckT, Sheet, Table } from './engine/types'
 import { loadLang, saveLang, strings, type Lang } from './i18n'
 import Deck from './ui/Deck'
@@ -10,7 +10,7 @@ import SheetPicker from './ui/SheetPicker'
 import sampleCsv from '../public/sample-sales.csv?raw'
 
 type State =
-  | { step: 'empty'; error?: boolean }
+  | { step: 'empty'; error?: string }
   | { step: 'parsing' }
   | { step: 'pick'; sheets: Sheet[]; file: string }
   | { step: 'deck'; table: Table; deck: DeckT }
@@ -26,10 +26,19 @@ export default function App() {
   }, [lang])
 
   const open = (file: File) => {
+    if (/\.sheetdeck\.json$/i.test(file.name)) {
+      file.text().then(fromFile).then(
+        ({ deck, table }) => setState({ step: 'deck', table, deck }),
+        () => setState({ step: 'empty', error: t.errorDeck }),
+      )
+      return
+    }
+    // SheetJS would read any text file as a sheet, so refuse the rest here
+    if (!/\.(xlsx|xls|csv)$/i.test(file.name)) return setState({ step: 'empty', error: t.error })
     setState({ step: 'parsing' })
     parseFile(file).then(
       (sheets) => setState({ step: 'pick', sheets, file: file.name }),
-      () => setState({ step: 'empty', error: true }),
+      () => setState({ step: 'empty', error: t.error }),
     )
   }
 
@@ -50,7 +59,7 @@ export default function App() {
           <>
             <h1>{t.headline}</h1>
             <p className="lead">{t.lead}</p>
-            {state.error && <p role="alert" className="error">{t.error}</p>}
+            {state.error && <p role="alert" className="error">{state.error}</p>}
             <DropZone t={t} onFile={open} onSample={() => open(new File([sampleCsv], 'sample-sales.csv', { type: 'text/csv' }))} />
           </>
         )}

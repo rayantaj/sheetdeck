@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { detectHeaderRow } from '../engine/detect'
+import { detectHeaderRow, findHeaderRow } from '../engine/detect'
 import type { Sheet } from '../engine/types'
 import type { Strings } from '../i18n'
 
@@ -26,6 +26,8 @@ export default function SheetPicker({ t, sheets, onContinue }: { t: Strings; she
           <button key={i} role="tab" aria-selected={i === active} className="tab" onClick={() => setActive(i)}>{s.name}</button>
         ))}
       </div>
+      {sheet.rows.length === 0 && <p role="status" className="error">{t.emptySheet}</p>}
+      {sheet.rows.length > 0 && findHeaderRow(sheet.rows) === null && <p role="status">{t.noHeader}</p>}
       <div className="table-wrap">
         <table className="preview">
           <tbody>
@@ -37,7 +39,7 @@ export default function SheetPicker({ t, sheets, onContinue }: { t: Strings; she
           </tbody>
         </table>
       </div>
-      <button className="btn primary" onClick={() => onContinue(sheet, header)}>{t.cont}</button>
+      <button className="btn primary" disabled={sheet.rows.length === 0} onClick={() => onContinue(sheet, header)}>{t.cont}</button>
     </section>
   )
 }

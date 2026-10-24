@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import type { Strings } from '../i18n'
+import Privacy from './Privacy'
 
 export default function DropZone({ t, onFile, onSample }: { t: Strings; onFile: (f: File) => void; onSample: () => void }) {
   const input = useRef<HTMLInputElement>(null)
@@ -26,7 +27,7 @@ export default function DropZone({ t, onFile, onSample }: { t: Strings; onFile: 
         <input
           ref={input}
           type="file"
-          accept=".xlsx,.xls,.csv"
+          accept=".xlsx,.xls,.csv,.json"
           hidden
           data-testid="file-input"
           onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f) }}
@@ -34,7 +35,7 @@ export default function DropZone({ t, onFile, onSample }: { t: Strings; onFile: 
       </div>
       <p className="under">
         <button type="button" className="link" onClick={onSample}>{t.sample}</button>
-        <span className="privacy">{t.privacy}</span>
+        <Privacy t={t} />
       </p>
     </div>
   )
