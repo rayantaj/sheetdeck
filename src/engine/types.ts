@@ -15,6 +15,6 @@ export interface ChartSpec {
 }
 // columns: total/distribution [number]; topN/share [category, number]; trend [date, number, category?]; compare [number, number].
 export interface Finding { id: string; kind: FindingKind; columns: string[]; chart: ChartSpec; score: number; facts: Record<string, number | string> }
-export interface Quality { emptyByColumn: Record<string, number>; duplicateRows: number; skippedRows: number; mismatches: Record<string, number> }
+export interface Quality { emptyByColumn: Record<string, number>; duplicateRows: number; skippedRows: number; mismatches: Record<string, number>; sampled?: number }
 export interface Slide { id: string; kind: 'title' | 'finding' | 'quality'; title: string; finding?: Finding; quality?: Quality; hidden: boolean }
 export interface Deck { source: { name: string; sheet: string; rows: number; cols: number }; lang: 'en' | 'ar'; slides: Slide[] }

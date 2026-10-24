@@ -70,6 +70,14 @@ main.wide { max-width: none; }
 .counter { all: unset; position: absolute; inset-block-end: var(--space-md); right: var(--space-lg); cursor: pointer; font-family: var(--font-outlier); font-size: var(--text-sm); padding: var(--space-xs); }
 .counter.on-black { color: #fff; z-index: 1; }
 
+.sheet { max-width: min(92vw, 36rem); margin: auto; }
+.sheet::backdrop { background: oklch(16% 0.006 60 / 0.5); }
+.sheet .btn { margin-block-start: var(--space-sm); }
+.export-rows { display: grid; gap: var(--space-sm); }
+.csp { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-outlier); font-size: var(--text-sm); background: var(--color-paper-2); padding: var(--space-sm); margin: 0; }
+.export-stage { position: fixed; left: -10000px; top: 0; pointer-events: none; }
+.export-slide { width: 1600px; }
+
 @media (max-width: 700px) {
   .deck-body { grid-template-columns: 1fr; }
   .rail { grid-auto-flow: column; grid-auto-columns: 160px; max-height: none; overflow: auto hidden; padding-block-end: var(--space-xs); }

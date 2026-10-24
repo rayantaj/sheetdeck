@@ -12,6 +12,8 @@ Render a hidden copy of each visible slide at 1600 × 900 CSS px, `toCanvas` wit
 
 On install: cache `index.html`, the manifest and every asset URL the page loaded (from `performance.getEntriesByType('resource')`, sent to the worker by the page after load). On fetch: cache first for same-origin, network otherwise is impossible (CSP), so fall back to the cached index for navigations.
 
+Built differently: the page also sends every `@font-face` URL and the parse worker chunk (`?worker&url`), because neither shows up in `performance` entries before the first file is dropped; the worker also caches any other same-origin GET it sees. The deck file wraps dates as `{ "$date": iso }`. A `.txt` (any extension but xlsx, xls, csv, .sheetdeck.json) is refused in `App.open`, since SheetJS reads text as a sheet. `findHeaderRow` returns null when no header is found, for the hint.
+
 ## Not in the code yet
 Named above but not there when the plan was approved: new files, or check them.
 - `src/ui/Export.tsx`

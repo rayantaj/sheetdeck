@@ -21,7 +21,10 @@ function toDate(c: Cell): Date | null {
 
 const BOOLS = [['yes', 'no'], ['true', 'false'], ['0', '1']]
 
-export function detectHeaderRow(rows: Cell[][]): number {
+export const detectHeaderRow = (rows: Cell[][]): number => findHeaderRow(rows) ?? 0
+
+// null when no row looks like a header.
+export function findHeaderRow(rows: Cell[][]): number | null {
   for (let i = 0; i < rows.length - 1; i++) {
     const row = rows[i]
     const width = Math.max(row.length, rows[i + 1].length)
@@ -29,7 +32,7 @@ export function detectHeaderRow(rows: Cell[][]): number {
     if (labels.length < width * 0.6) continue
     if (rows[i + 1].some((c) => !isEmpty(c) && (typeof c !== 'string' || toNumber(c) !== null || toDate(c)))) return i
   }
-  return 0
+  return null
 }
 
 export function applyHeader(sheet: Sheet, headerRow: number): Table {

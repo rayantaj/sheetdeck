@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Deck as DeckT, Slide, Table } from '../engine/types'
 import type { Strings } from '../i18n'
+import Export from './Export'
 import Present from './Present'
 import SlideCard from './SlideCard'
 import SlideEditor from './SlideEditor'
@@ -8,6 +9,7 @@ import SlideEditor from './SlideEditor'
 export default function Deck({ t, deck, table, setDeck, onBack }: { t: Strings; deck: DeckT; table: Table; setDeck: (d: DeckT) => void; onBack: () => void }) {
   const [cur, setCur] = useState(deck.slides[0].id)
   const [presenting, setPresenting] = useState(false)
+  const [exporting, setExporting] = useState(false)
   const [dragFrom, setDragFrom] = useState<number | null>(null)
   const slide = deck.slides.find((s) => s.id === cur) ?? deck.slides[0]
   const edit = (next: Slide) => setDeck({ ...deck, slides: deck.slides.map((s) => (s.id === next.id ? next : s)) })
@@ -22,7 +24,7 @@ export default function Deck({ t, deck, table, setDeck, onBack }: { t: Strings; 
       <div className="deck-bar">
         <button className="btn" onClick={onBack}>{t.back}</button>
         <div className="deck-actions">
-          <button className="btn" disabled title={t.exportSoon}>{t.export}</button>
+          <button className="btn" onClick={() => setExporting(true)}>{t.export}</button>
           <button className="btn primary" disabled={deck.slides.every((s) => s.hidden)} onClick={() => setPresenting(true)}>{t.present}</button>
         </div>
       </div>
@@ -52,6 +54,7 @@ export default function Deck({ t, deck, table, setDeck, onBack }: { t: Strings; 
           <SlideEditor t={t} deck={deck} table={table} slide={slide} onChange={edit} />
         </div>
       </div>
+      {exporting && <Export t={t} deck={deck} table={table} slide={slide} onClose={() => setExporting(false)} />}
       {presenting && <Present t={t} deck={deck} startId={slide.id} onExit={() => setPresenting(false)} />}
     </section>
   )

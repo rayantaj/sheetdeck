@@ -15,6 +15,7 @@ export default function SlideCard({ slide, deck, shadow, mini }: { slide: Slide;
         ...Object.entries(q.mismatches).filter(([, n]) => n > 0).map(([c, n]) => `${c}: ${n} ${t.qMismatch}`),
         ...(q.duplicateRows ? [`${q.duplicateRows} ${t.qDuplicates}`] : []),
         ...(q.skippedRows ? [`${q.skippedRows} ${t.qSkipped}`] : []),
+        ...(q.sampled ? [`${q.sampled} ${t.qSampled}`] : []),
       ]
     : []
 
