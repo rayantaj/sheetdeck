@@ -59,7 +59,7 @@ export default function Export({ t, deck, table, slide, onClose }: { t: Strings;
         {failed && <p role="alert" className="error">{t.exportFailed} ({failed})</p>}
         <button className="btn" onClick={() => dlg.current?.close()}>{t.close}</button>
       </dialog>
-      <div className="export-stage" aria-hidden="true">
+      <div ref={stage} className="export-stage" aria-hidden="true">
         <div className="export-slide">{shown && <SlideCard slide={shown} deck={deck} />}</div>
       </div>
     </>
