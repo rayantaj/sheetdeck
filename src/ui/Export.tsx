@@ -14,7 +14,7 @@ export default function Export({ t, deck, table, slide, onClose }: { t: Strings;
   const stage = useRef<HTMLDivElement>(null)
   const [shown, setShown] = useState<Slide | null>(null)
   const [busy, setBusy] = useState(false)
-  const [failed, setFailed] = useState(false)
+  const [failed, setFailed] = useState('')
 
   useEffect(() => dlg.current?.showModal(), [])
 
@@ -28,11 +28,12 @@ export default function Export({ t, deck, table, slide, onClose }: { t: Strings;
 
   const run = async (job: () => Promise<void>) => {
     setBusy(true)
-    setFailed(false)
+    setFailed('')
     try {
       await job()
-    } catch {
-      setFailed(true)
+    } catch (e) {
+      console.error(e)
+      setFailed(e instanceof Error ? e.message : String(e))
     }
     flushSync(() => setShown(null))
     setBusy(false)
@@ -56,7 +57,7 @@ export default function Export({ t, deck, table, slide, onClose }: { t: Strings;
           <button className="btn" disabled={busy} onClick={file}>{t.exportFile}</button>
         </div>
         {busy && <p role="status">{t.exportWorking}</p>}
-        {failed && <p role="alert" className="error">{t.exportFailed}</p>}
+        {failed && <p role="alert" className="error">{t.exportFailed} ({failed})</p>}
         <button className="btn" onClick={() => dlg.current?.close()}>{t.close}</button>
       </dialog>
       <div className="export-stage" aria-hidden="true">

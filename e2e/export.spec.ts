@@ -1,3 +1,4 @@
+import { spawn } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 
@@ -46,11 +47,15 @@ test('a .txt file is refused plainly', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('works offline after a first visit', async ({ page, context }) => {
-  await page.goto('/sheetdeck/')
+test('works offline after a first visit, with the server stopped', async ({ page }) => {
+  const server = spawn('npx', ['vite', 'preview', '--port', '4175', '--strictPort'], { stdio: 'ignore' })
+  const url = 'http://localhost:4175/sheetdeck/'
+  await expect.poll(() => fetch(url).then((r) => r.ok, () => false), { timeout: 20000 }).toBe(true)
+  await page.goto(url)
   await page.evaluate(() => navigator.serviceWorker.ready)
-  await page.waitForTimeout(1500) // the worker is caching the bundle
-  await context.setOffline(true)
+  await page.waitForTimeout(2000) // the worker is caching the bundle
+  server.kill()
+  await expect.poll(() => fetch(url).then(() => true, () => false), { timeout: 10000 }).toBe(false)
   await page.reload()
   await page.getByTestId('file-input').setInputFiles('test/fixtures/sales.csv')
   await page.getByRole('button', { name: 'Continue' }).click()

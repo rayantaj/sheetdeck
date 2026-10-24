@@ -31,14 +31,18 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== self.location.origin) return
+  // Match by URL: a module script's CORS-mode request would otherwise miss entries cached by c.add(url).
+  const lookup = () => caches.match(e.request.url, { ignoreSearch: true, ignoreVary: true })
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(
-      (hit) =>
-        hit ??
-        fetch(e.request).then((res) => {
-          if (res.ok) caches.open(CACHE).then((c) => c.put(e.request, res.clone()))
-          return res
-        }),
-    ).catch(() => (e.request.mode === 'navigate' ? caches.match('./') : Response.error())),
+    lookup()
+      .then(
+        (hit) =>
+          hit ??
+          fetch(e.request).then((res) => {
+            if (res.ok) caches.open(CACHE).then((c) => c.put(e.request.url, res.clone()))
+            return res
+          }),
+      )
+      .catch(async () => (e.request.mode === 'navigate' && (await caches.match(abs('./', self.location)))) || new Response('', { status: 504 })),
   )
 })
