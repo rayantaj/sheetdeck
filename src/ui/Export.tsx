@@ -18,12 +18,11 @@ export default function Export({ t, deck, table, slide, onClose }: { t: Strings;
 
   useEffect(() => dlg.current?.showModal(), [])
 
-  // Draws the slide in the hidden 1600 px stage and returns it as a canvas.
+  // Mounts the slide in the hidden stage so its chart paints, then draws the slide on a canvas.
   const draw = async (s: Slide) => {
     flushSync(() => setShown(s))
-    await document.fonts.ready
     await new Promise((r) => requestAnimationFrame(r))
-    return renderSlide(stage.current!.firstElementChild as HTMLElement)
+    return renderSlide(s, deck, stage.current!.querySelector('canvas'))
   }
 
   const run = async (job: () => Promise<void>) => {
