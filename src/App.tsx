@@ -1,25 +1,24 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { parseFile } from './engine/parse'
-import { applyHeader, detectTypes } from './engine/detect'
+import { applyHeader } from './engine/detect'
 import { buildDeck } from './engine/deck'
-import type { Column, Deck, Sheet, Table } from './engine/types'
+import type { Deck as DeckT, Sheet, Table } from './engine/types'
 import { loadLang, saveLang, strings, type Lang } from './i18n'
+import Deck from './ui/Deck'
 import DropZone from './ui/DropZone'
 import SheetPicker from './ui/SheetPicker'
-import Summary from './ui/Summary'
 import sampleCsv from '../public/sample-sales.csv?raw'
 
 type State =
   | { step: 'empty'; error?: boolean }
   | { step: 'parsing' }
   | { step: 'pick'; sheets: Sheet[]; file: string }
-  | { step: 'summary'; columns: Column[]; table: Table; source: Deck['source'] }
+  | { step: 'deck'; table: Table; deck: DeckT }
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(loadLang)
   const [state, setState] = useState<State>({ step: 'empty' })
   const t = strings[lang]
-  const deck = useMemo(() => (state.step === 'summary' ? buildDeck(state.table, state.source, lang) : null), [state, lang])
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -46,7 +45,7 @@ export default function App() {
         <strong className="brand">sheetdeck</strong>
         <button className="btn" onClick={toggle}>{t.toggle}</button>
       </header>
-      <main>
+      <main className={state.step === 'deck' ? 'wide' : undefined}>
         {state.step === 'empty' && (
           <>
             <h1>{t.headline}</h1>
@@ -63,11 +62,11 @@ export default function App() {
             onContinue={(sheet, header) => {
               const table = applyHeader(sheet, header)
               const source = { name: state.file, sheet: sheet.name, rows: table.rows.length, cols: table.columns.length }
-              setState({ step: 'summary', columns: detectTypes(table), table, source })
+              setState({ step: 'deck', table, deck: buildDeck(table, source, lang) })
             }}
           />
         )}
-        {state.step === 'summary' && deck && <Summary t={t} columns={state.columns} rows={state.table.rows.length} deck={deck} onBack={() => setState({ step: 'empty' })} />}
+        {state.step === 'deck' && <Deck t={t} deck={state.deck} table={state.table} setDeck={(deck) => setState({ ...state, deck })} onBack={() => setState({ step: 'empty' })} />}
       </main>
     </div>
   )
