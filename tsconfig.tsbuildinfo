@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/i18n.ts","./src/main.tsx","./src/engine/detect.test.ts","./src/engine/detect.ts","./src/engine/parse.ts","./src/engine/types.ts","./src/ui/dropzone.tsx","./src/ui/sheetpicker.tsx","./src/ui/summary.tsx","./src/workers/parse.worker.ts","./e2e/privacy.spec.ts","./vite.config.ts","./playwright.config.ts"],"version":"6.0.3"}
