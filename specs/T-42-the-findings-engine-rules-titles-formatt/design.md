@@ -13,6 +13,15 @@ interface Deck { source: { name: string; sheet: string; rows: number; cols: numb
 interface Slide { id: string; kind: 'title'|'finding'|'quality'; title: string; finding?: Finding; hidden: boolean }
 ```
 
+## Build differs from the plan (and why)
+
+- Added `src/engine/cells.ts` (number/date/text readers): detect.ts's are private and it's on the Don't touch list.
+- No `test/fixtures/flat.csv` or `big.csv`: the flat and 2,000-row tables are built in memory in `findings.test.ts`.
+- `Slide` has an optional `quality` (the data for the closing slide). `Quality` is in `types.ts`.
+- Scatter: `labels` = x values as text, `datasets[0].data` = y values (ChartSpec has no point objects).
+- Date buckets count occupied buckets (6 to 60), not the span. Flat number columns are left out of every rule.
+- `App` builds the deck with `useMemo` so toggling the language rebuilds it; the pick state keeps the file name for `source`.
+
 ## Rules
 
 Pure functions, no DOM, no React. Dates bucket by the range: ≤ 60 days by day, ≤ 18 months by week or month (whichever gives 6 to 60 points), else by month or quarter. Others = the rest of the categories summed. Pearson r on rows where both numbers are present.
