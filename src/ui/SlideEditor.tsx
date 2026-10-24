@@ -6,7 +6,7 @@ import type { ChartSpec, Deck, Finding, FindingKind, Slide, Table } from '../eng
 import type { Strings } from '../i18n'
 
 const TYPES: Record<FindingKind, ChartSpec['type'][]> = {
-  total: ['bar'], topN: ['bar', 'doughnut'], share: ['bar', 'doughnut'], trend: ['line', 'bar'], compare: ['scatter'], distribution: ['histogram'],
+  total: ['bar'], topN: ['bar', 'doughnut'], share: ['bar', 'doughnut'], trend: ['line', 'bar'], compare: ['scatter', 'bar'], distribution: ['histogram'],
 }
 
 // The same finding with another number column as its measure, or undefined when that column yields none.

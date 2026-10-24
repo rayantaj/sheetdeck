@@ -1,6 +1,6 @@
 # Charts, slides, the editor and presentation mode: tasks
 
-Built as T-43.
+Built as T-43: https://github.com/rayantaj/sheetdeck/pull/3.
 
 - [x] src/ui/ChartView.tsx: a Chart.js 4 wrapper (react-chartjs-2 is not needed: use the Chart constructor on a canvas ref) that draws a ChartSpec with the palette from docs/ui.md in fixed order by dataset index, the theme's fonts, one axis, tabular numerals, a legend when two or more datasets, no animation, and RTL mirroring (rtl: true in Chart.js options and reversed x for bars) when the deck is Arabic. Histogram = bar with no gaps.
 - [x] src/ui/SlideCard.tsx: a 16:9 card in the Terrazzo look: the title in Syne at the top, the chart filling the rest, a footnote line in Onest 500 naming the columns used and the row count; the title slide shows the file name, sheet, rows × columns and the date; the quality slide shows the quality facts as a short ruled list.

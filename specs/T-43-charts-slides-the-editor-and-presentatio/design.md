@@ -33,3 +33,5 @@ Named above but not there when the plan was approved: new files, or check them.
 - `src/ui/SlideEditor.tsx`
 - `src/ui/Present.tsx`
 - `src/ui/palette.ts`
+
+Change after QA: a compare finding offers scatter and bar chips (not scatter only), so criterion 2's chip switch works on slide 2 of sales.csv.
