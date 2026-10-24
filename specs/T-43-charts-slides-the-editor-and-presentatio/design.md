@@ -16,6 +16,15 @@ The card is `aspect-ratio: 16 / 9`, padding `--space-xl`, the title at `--text-s
 
 ArrowRight/Space/PageDown next, ArrowLeft/PageUp previous, Escape leave, B pause. Touch: swipe left/right.
 
+## As built (differences from the above)
+
+- `App` state is `empty | parsing | pick | deck`; Present is an overlay inside `Deck.tsx` (so the editor keeps its selected slide), not an App screen.
+- `palette.ts` holds only the categorical colours; the sequential ramp is unused so it is not there yet.
+- Slides are sized in `cqw` units inside a container-query frame, so one card serves rail, editor and Present.
+- Measure swap re-runs `findFindings` on a sub-table (date/category + the new number column) in `SlideEditor.tsx`; the engine is untouched. Only columns that yield a finding of the same kind are offered.
+- The deck is built once at Continue; toggling the interface language afterwards does not rebuild it (edits would be lost).
+- `Summary.tsx` deleted; `e2e/privacy.spec.ts` now asserts the editor's title slide.
+
 ## Not in the code yet
 Named above but not there when the plan was approved: new files, or check them.
 - `src/ui/ChartView.tsx`

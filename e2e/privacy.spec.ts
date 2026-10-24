@@ -7,9 +7,8 @@ test('no request leaves the page, and the CSP forbids it', async ({ page, baseUR
   await page.goto('/sheetdeck/')
   await page.getByTestId('file-input').setInputFiles('test/fixtures/sales.csv')
   await page.getByRole('button', { name: 'Continue' }).click()
-  await expect(page.getByTestId('summary')).toBeVisible()
-  await expect(page.getByTestId('row-count')).toHaveText('10')
-  await expect(page.getByTestId('col-count')).toHaveText('4')
+  await expect(page.getByTestId('deck')).toBeVisible()
+  await expect(page.getByTestId('slide').first()).toContainText('10 rows × 4 columns')
 
   expect(urls.length).toBeGreaterThan(0)
   for (const u of urls) expect(u.startsWith(`${baseURL}/sheetdeck/`), u).toBe(true)
