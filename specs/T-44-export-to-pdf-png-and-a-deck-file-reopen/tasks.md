@@ -1,6 +1,6 @@
 # Export to PDF, PNG and a deck file; reopen; the privacy panel; offline; edge states: tasks
 
-Built as T-44.
+Built as T-44: https://github.com/rayantaj/sheetdeck/pull/4.
 
 - [x] src/ui/Export.tsx: a sheet (a Terrazzo card) with three rows: 'PDF, all slides' (jspdf: one landscape 16:9 page per visible slide, each slide rendered to a canvas with html-to-image's toCanvas at 2x, placed edge to edge), 'PNG, this slide' (the same render, downloaded), and 'Deck file' (.sheetdeck.json: the Deck plus the Table, pretty-printed). Downloads use a blob URL and an anchor click; nothing else.
 - [x] Reopen: the drop zone also accepts a .sheetdeck.json file and restores the deck and table straight into the editor (src/engine/deck.ts fromFile with a version field and a clear error for a wrong file).

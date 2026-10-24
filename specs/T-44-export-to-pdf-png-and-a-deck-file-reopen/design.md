@@ -2,7 +2,7 @@
 
 ## Files
 
-New: `src/ui/Export.tsx`, `src/ui/Privacy.tsx`, `src/export/pdf.ts`, `src/export/png.ts`, `public/manifest.webmanifest`, `public/icon.svg`, `public/icon-512.png`, `public/sw.js`, `src/sw-register.ts`. Changed: `src/engine/deck.ts` (toFile/fromFile with `version: 1`), `src/ui/DropZone.tsx` (accepts .sheetdeck.json), `src/App.tsx`, `src/i18n.ts`, `package.json` (jspdf, html-to-image, the lint:design script), `README.md`.
+New: `src/ui/Export.tsx`, `src/ui/Privacy.tsx`, `src/export/pdf.ts`, `src/export/png.ts`, `public/manifest.webmanifest`, `public/icon.svg`, `public/icon-512.png`, `public/sw.js`, `src/sw-register.ts`. Changed: `src/engine/deck.ts` (toFile/fromFile with `version: 1`), `src/ui/DropZone.tsx` (accepts .sheetdeck.json), `src/App.tsx`, `src/i18n.ts`, `package.json` (jspdf, html2canvas, the lint:design script; html-to-image was dropped because it fetches fonts, which connect-src 'none' blocks; the service worker precaches the page, bundle, chunks and fonts itself on install instead of waiting for a message from the page), `README.md`.
 
 ## Export
 
