@@ -44,6 +44,34 @@ describe('deck', () => {
     expect(() => fromFile('hello')).toThrow('Not a sheetdeck file')
     expect(() => fromFile('{"version":2}')).toThrow('Not a sheetdeck file')
   })
+  it('a deck file with malformed slides or columns is refused', () => {
+    const table = { columns: [{ name: 'n' }], rows: [[1]] }
+    const deck = buildDeck(csv('sales'), source, 'en')
+    type Obj = Record<string, unknown>
+    const arr = (x: unknown) => x as unknown[]
+    const obj = (x: unknown) => x as Obj
+    const make = (f: (d: Obj, t: Obj) => void) => {
+      const d = structuredClone(deck) as unknown as Obj
+      const t = structuredClone(table) as unknown as Obj
+      f(d, t)
+      return toFile(d as unknown as typeof deck, t as unknown as typeof table)
+    }
+    const bad = [
+      make((d) => { arr(d.slides)[0] = null }),
+      make((d) => { obj(arr(d.slides)[0]).kind = 'script' }),
+      make((d) => { obj(arr(d.slides)[0]).title = 5 }),
+      make((d) => { obj(arr(d.slides)[0]).hidden = 'no' }),
+      make((d) => { obj(arr(d.slides)[1]).finding = { chart: {} } }),
+      make((d) => { d.lang = 'fr' }),
+      make((_, t) => { arr(t.columns)[0] = 'n' }),
+      make((_, t) => { arr(t.columns)[0] = { name: 7 } }),
+      make((_, t) => { arr(t.rows)[0] = 'x' }),
+      make((_, t) => { arr(t.rows)[0] = [{ a: 1 }] }),
+      make((_, t) => { arr(t.rows)[0] = [[1]] }),
+    ]
+    for (const text of bad) expect(() => fromFile(text)).toThrow('Not a sheetdeck file')
+    expect(() => fromFile(make(() => {}))).not.toThrow()
+  })
   it('a table over 100k rows is sampled to 20k and says so', () => {
     const rows = Array.from({ length: 100_001 }, (_, i) => [`c${i % 5}`, i % 97])
     const d = buildDeck({ columns: [{ name: 'k' }, { name: 'v' }], rows }, source, 'en')
